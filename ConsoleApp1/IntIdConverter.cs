@@ -4,7 +4,7 @@ namespace ConsoleApp1
 {
     public class IntIdConverter : IdConverter<int>
     {
-        protected IntIdConverter(string start) : base(start)
+        public IntIdConverter(string start) : base(start)
         {
         }
 

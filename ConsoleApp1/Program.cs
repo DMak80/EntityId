@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Concurrent;
 using System.Reflection;
 
 namespace ConsoleApp1
@@ -12,19 +11,19 @@ namespace ConsoleApp1
             Console.WriteLine("Hello World!");
 
             var userId = new UserId(1);
-            var uidUserId = userId.UID;
+            var uidUserId = userId.ToUid();
             var permId = new PermId("123");
-            var uidPermId = permId.UID;
-            var userId2 = new UserId(uidUserId);
-            var permId2 = new PermId(uidPermId);
-            var permId3 = new PermId(uidUserId);
+            var uidPermId = permId.ToUid();
+            var userId2 = uidUserId.ToId<int, UserId>(); //new UserId(uidUserId);
+            var permId2 = uidPermId.ToId<string, PermId>(); //new PermId(uidPermId);
+            var permId3 = uidUserId.ToId<string, PermId>(); //new PermId(uidUserId);
         }
     }
 
-    [AttributeUsage(AttributeTargets.Field)]
-    public class EntityPropertiesAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Struct)]
+    public class EntityIdAttribute : Attribute
     {
-        public EntityPropertiesAttribute(string prefix, Type idType)
+        public EntityIdAttribute(string prefix, Type idType)
         {
             Prefix = prefix;
             IdType = idType;
@@ -34,81 +33,153 @@ namespace ConsoleApp1
         public Type IdType { get; }
     }
 
-    public enum EntityType
-    {
-        [EntityProperties("U", typeof(IntIdConverter))]
-        User,
+//    public enum EntityType
+//    {
+//        [EntityProperties("U", typeof(IntIdConverter))]
+//        User,
+//
+//        [EntityProperties("P", typeof(StringIdConverter))]
+//        Permission
+//    }
 
-        [EntityProperties("P", typeof(StringIdConverter))]
-        Permission
+//    public static class EntityTypeExtensions
+//    {
+//        private static readonly Lazy<IReadOnlyDictionary<EntityType, BaseIdConverter>> _lazyDic =
+//            new Lazy<IReadOnlyDictionary<EntityType, BaseIdConverter>>(() =>
+//            {
+//                return typeof(EntityType)
+//                    .GetFields()
+//                    .Where(f => f.GetCustomAttribute<EntityPropertiesAttribute>() != null)
+//                    .Where(f => typeof(BaseIdConverter).IsAssignableFrom(f
+//                        .GetCustomAttribute<EntityPropertiesAttribute>().IdType))
+//                    .ToDictionary(f => (EntityType) f.GetValue(null), f =>
+//                    {
+//                        var attr = f.GetCustomAttribute<EntityPropertiesAttribute>();
+//                        return (BaseIdConverter) Activator.CreateInstance(attr.IdType, attr.Prefix);
+//                    });
+//            });
+//
+//        public static IdConverter<T> GetConverter<T>(this EntityType type)
+//        {
+//            if (_lazyDic.Value.TryGetValue(type, out var converter)) return (IdConverter<T>) converter;
+//
+//            return null;
+//        }
+//    }
+
+    public interface IIdBase<out T, TC>
+        where TC : IIdBase<T, TC>
+    {
+        T Id { get; }
+        UId ToUid();
     }
 
-    public static class EntityTypeExtensions
+    public static class IdBaseExtensions
     {
-        private static readonly Lazy<IReadOnlyDictionary<EntityType, BaseIdConverter>> _lazyDic =
-            new Lazy<IReadOnlyDictionary<EntityType, BaseIdConverter>>(() =>
+        private static readonly ConcurrentDictionary<Type, BaseIdConverter> Converters =
+            new ConcurrentDictionary<Type, BaseIdConverter>();
+
+        private static IdConverter<T> GetConverter<T, TC>(this IIdBase<T, TC> obj)
+            where TC : IIdBase<T, TC>
+        {
+            return GetConverter<T, TC>();
+        }
+
+        private static IdConverter<T> GetConverter<T, TC>()
+            where TC : IIdBase<T, TC>
+        {
+            return (IdConverter<T>) Converters.GetOrAdd(typeof(TC), tc =>
             {
-                return typeof(EntityType)
-                    .GetFields()
-                    .Where(f => f.GetCustomAttribute<EntityPropertiesAttribute>() != null)
-                    .Where(f => typeof(BaseIdConverter).IsAssignableFrom(f
-                        .GetCustomAttribute<EntityPropertiesAttribute>().IdType))
-                    .ToDictionary(f => (EntityType) f.GetValue(null), f =>
-                    {
-                        var attr = f.GetCustomAttribute<EntityPropertiesAttribute>();
-                        return (BaseIdConverter) Activator.CreateInstance(attr.IdType, attr.Prefix);
-                    });
+                var attr = tc.GetCustomAttribute<EntityIdAttribute>();
+                if (attr?.IdType == null) return null;
+
+                if (!typeof(IdConverter<T>).IsAssignableFrom(attr.IdType))
+                    throw new InvalidCastException($"{attr.IdType.Name} to {typeof(IdConverter<T>).Name}");
+
+                return (BaseIdConverter) Activator.CreateInstance(attr.IdType, attr.Prefix);
             });
+        }
 
-        public static IdConverter<T> GetConverter<T>(this EntityType type)
+        public static UId ToUid<T, TC>(this IIdBase<T, TC> obj)
+            where TC : IIdBase<T, TC>
         {
-            if (_lazyDic.Value.TryGetValue(type, out var converter)) return (IdConverter<T>) converter;
+            return obj.GetConverter().ToUid(obj.Id);
+        }
 
-            return null;
+        public static TC ToId<T, TC>(this UId obj)
+            where TC : IIdBase<T, TC>
+        {
+            return (TC) Activator.CreateInstance(typeof(TC), GetConverter<T, TC>().FromUid(obj));
         }
     }
 
-    public class IdBase<T, TConv>
-        where TConv : IdConverter<T>
+
+    [EntityId("U", typeof(IntIdConverter))]
+    public struct UserId : IIdBase<int, UserId>
     {
-        private static readonly Lazy<TConv> conv = new Lazy<TConv>(Activator.CreateInstance<TConv>);
-        private UId? uid;
-
-        protected IdBase(T key)
+        public UserId(int id)
         {
-            Key = key;
+            Id = id;
         }
 
-        protected IdBase(UId uid) : this(Conv.FromUid(uid))
+        public int Id { get; }
+
+        public UId ToUid()
         {
-            this.uid = uid;
+            return IdBaseExtensions.ToUid(this);
         }
-
-        protected static TConv Conv => conv.Value;
-
-        public UId UID => uid ?? (uid = conv.Value.ToUid(Key)).Value;
-        public T Key { get; }
     }
 
-    public class UserId : IdBase<int, EntityType.User.GetConverter<int>()>
+    [EntityId("P", typeof(StringIdConverter))]
+    public struct PermId : IIdBase<string, PermId>
     {
-        public UserId(int key) : base(key)
+        public PermId(string id)
         {
+            Id = id;
         }
 
-        public UserId(UId uid) : base(uid)
+        public string Id { get; }
+
+        public UId ToUid()
         {
+            return IdBaseExtensions.ToUid(this);
         }
     }
 
-    public class PermId : IdBase<string, PermIdConverter>
-    {
-        public PermId(string key) : base(key)
-        {
-        }
+//    [EntityProperties("U", typeof(IntIdConverter))]
+//    public class UserId : IdBase<int>
+//    {
+//        public class UserIdConverter : IntIdConverter
+//        {
+//            protected UserIdConverter() : base("U")
+//            {
+//            }
+//        }
+//
+//        public UserId(int id) : base(id)
+//        {
+//        }
+//
+//        public UserId(UId uid) : base(uid)
+//        {
+//        }
+//    }
 
-        public PermId(UId uid) : base(uid)
-        {
-        }
-    }
+//    public class PermId : IdBase<string, PermIdConverter>
+//    {
+//        public class UserIdConverter : IntIdConverter
+//        {
+//            protected UserIdConverter() : base("U")
+//            {
+//            }
+//        }
+//
+//        public PermId(string key) : base(key)
+//        {
+//        }
+//
+//        public PermId(UId uid) : base(uid)
+//        {
+//        }
+//    }
 }
