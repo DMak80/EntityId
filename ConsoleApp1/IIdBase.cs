@@ -4,6 +4,5 @@ namespace ConsoleApp1
         where TC : IIdBase<T, TC>
     {
         T Id { get; }
-        UId ToUid();
     }
 }

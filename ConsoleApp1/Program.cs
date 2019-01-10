@@ -27,11 +27,6 @@ namespace ConsoleApp1
         }
 
         public int Id { get; }
-
-        public UId ToUid()
-        {
-            return IdBaseExtensions.ToUid(this);
-        }
     }
 
     [EntityIdType(EntityType.Permission)]
@@ -43,10 +38,5 @@ namespace ConsoleApp1
         }
 
         public string Id { get; }
-
-        public UId ToUid()
-        {
-            return IdBaseExtensions.ToUid(this);
-        }
     }
 }
