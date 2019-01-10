@@ -1,3 +1,5 @@
+using System;
+
 namespace EntityIdLib.Core
 {
     public static class IdBaseExtensions

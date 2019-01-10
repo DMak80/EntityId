@@ -1,4 +1,5 @@
-﻿using EntityIdLib;
+﻿using System;
+using EntityIdLib;
 using EntityIdLib.Core;
 using EntityIdLib.EntityTypeFormat;
 

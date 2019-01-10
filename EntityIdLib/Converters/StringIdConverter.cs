@@ -1,3 +1,5 @@
+using System;
+
 namespace EntityIdLib.Converters
 {
     public class StringIdConverter : IdConverter<string>

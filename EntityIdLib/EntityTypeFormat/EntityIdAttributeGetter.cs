@@ -1,3 +1,5 @@
+using System;
+using System.Reflection;
 using EntityIdLib.Attributes;
 
 namespace EntityIdLib.EntityTypeFormat

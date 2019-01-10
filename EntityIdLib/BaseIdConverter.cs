@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+
 namespace EntityIdLib
 {
     public class BaseIdConverter

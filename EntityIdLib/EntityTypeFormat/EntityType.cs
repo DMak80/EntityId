@@ -1,3 +1,4 @@
+using EntityIdLib.Attributes;
 using EntityIdLib.Converters;
 
 namespace EntityIdLib.EntityTypeFormat

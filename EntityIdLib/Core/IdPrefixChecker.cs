@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+
 namespace EntityIdLib.Core
 {
     public static class IdPrefixChecker

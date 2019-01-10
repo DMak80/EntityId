@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Concurrent;
+using System.Reflection;
 using EntityIdLib.Attributes;
 using EntityIdLib.EntityTypeFormat;
 

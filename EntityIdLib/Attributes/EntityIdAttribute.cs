@@ -1,3 +1,5 @@
+using System;
+
 namespace EntityIdLib.Attributes
 {
     [AttributeUsage(AttributeTargets.Field)]

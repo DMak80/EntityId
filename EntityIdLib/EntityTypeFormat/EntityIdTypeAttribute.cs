@@ -1,3 +1,5 @@
+using System;
+
 namespace EntityIdLib.EntityTypeFormat
 {
     [AttributeUsage(AttributeTargets.Struct)]
