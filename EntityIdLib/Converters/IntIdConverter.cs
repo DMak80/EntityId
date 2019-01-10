@@ -1,6 +1,4 @@
-using System;
-
-namespace ConsoleApp1
+namespace EntityIdLib.Converters
 {
     public class IntIdConverter : IdConverter<int>
     {

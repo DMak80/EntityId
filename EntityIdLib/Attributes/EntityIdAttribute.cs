@@ -1,6 +1,4 @@
-using System;
-
-namespace ConsoleApp1
+namespace EntityIdLib.Attributes
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class EntityIdAttribute : Attribute
@@ -13,16 +11,5 @@ namespace ConsoleApp1
 
         public string Prefix { get; }
         public Type IdType { get; }
-    }
-
-    [AttributeUsage(AttributeTargets.Struct)]
-    public class EntityIdTypeAttribute : Attribute
-    {
-        public EntityIdTypeAttribute(EntityType type)
-        {
-            Type = type;
-        }
-
-        public EntityType Type { get; }
     }
 }
