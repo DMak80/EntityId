@@ -1,6 +1,6 @@
 using System;
 using EntityIdLib.Ids;
-using EntityIdLib.UIds;
+using EntityIdLib.Uids;
 
 namespace EntityIdLib.Converters
 {

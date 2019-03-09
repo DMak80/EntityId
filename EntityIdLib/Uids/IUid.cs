@@ -1,4 +1,4 @@
-namespace EntityIdLib.UIds
+namespace EntityIdLib.Uids
 {
     public interface IUid
     {

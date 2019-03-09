@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using EntityIdLib.Ids;
-using EntityIdLib.UIds;
+using EntityIdLib.Uids;
 
 namespace EntityIdLib.Default
 {

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using EntityIdLib.Converters;
 
 namespace EntityIdLib.Ids
@@ -8,19 +10,19 @@ namespace EntityIdLib.Ids
     {
         public static IdCore Instance { get; private set; }
 
-        public static void Init(IEntityIdDescGetter getter)
+        public static void Init(IEnumerable<EntityIdInfo> infos)
         {
-            Instance = new IdCore(getter);
+            Instance = new IdCore(infos);
         }
 
         private readonly ConcurrentDictionary<Type, BaseIdConverter> _converters =
             new ConcurrentDictionary<Type, BaseIdConverter>();
 
-        private readonly IEntityIdDescGetter _getter;
+        public IReadOnlyList<EntityIdInfo> Infos { get; }
 
-        private IdCore(IEntityIdDescGetter getter)
+        private IdCore(IEnumerable<EntityIdInfo> infos)
         {
-            _getter = getter ?? throw new ArgumentNullException(nameof(getter));
+            Infos = infos.ToList();
         }
 
         public IdConverter<T> GetConverter<T, TC>()
@@ -31,8 +33,7 @@ namespace EntityIdLib.Ids
 
         private BaseIdConverter GetConverter<T>(Type tc)
         {
-            EntityIdInfo info = null;
-            info = _getter.Get(tc);
+            var info = Infos.FirstOrDefault(i => i.IdType == tc);
             if (info?.IdTypeConverter == null || string.IsNullOrEmpty(info.Info.Prefix))
             {
                 return null;

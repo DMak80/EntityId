@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EntityIdLib.UIds
+namespace EntityIdLib.Uids
 {
     public class UidCore
     {

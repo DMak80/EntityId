@@ -4,7 +4,7 @@ using EntityIdLib.Default;
 using EntityIdLib.Ids;
 using EntityIdLib.Tests.EntityTypeFormat;
 using EntityIdLib.Tests.EntityTypeFormat.Ids;
-using EntityIdLib.UIds;
+using EntityIdLib.Uids;
 using Xunit;
 
 namespace EntityIdLib.Tests
@@ -14,7 +14,7 @@ namespace EntityIdLib.Tests
         public UnitTest1()
         {
             UidCore.Init(UidEnumConverter.GetUidInfos<EntityType>());
-            IdCore.Init(new DefaultEntityIdDescGetter<EntityIds>());
+            IdCore.Init(UidEnumConverter.GetIdInfos<EntityIds>());
         }
 
         [Fact]

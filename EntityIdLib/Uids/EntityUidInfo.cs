@@ -1,6 +1,6 @@
 using System;
 
-namespace EntityIdLib.UIds
+namespace EntityIdLib.Uids
 {
     public class EntityUidInfo
     {

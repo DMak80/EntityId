@@ -1,4 +1,4 @@
-using EntityIdLib.UIds;
+using EntityIdLib.Uids;
 
 namespace EntityIdLib.Converters
 {
