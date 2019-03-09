@@ -11,7 +11,7 @@ namespace EntityIdLib.Default
 
         public DefaultEntityIdDescGetter()
         {
-            _dic = UIdEnumConverter.GetIdInfos<T>()
+            _dic = UidEnumConverter.GetIdInfos<T>()
                 .ToDictionary(i => i.IdType);
         }
 

@@ -6,7 +6,7 @@ using EntityIdLib.UIds;
 
 namespace EntityIdLib.Default
 {
-    public class UIdEnumConverter
+    public class UidEnumConverter
     {
         public static List<EntityUidInfo> GetUidInfos<T>()
         {

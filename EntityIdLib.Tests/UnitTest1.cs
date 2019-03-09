@@ -13,7 +13,7 @@ namespace EntityIdLib.Tests
     {
         public UnitTest1()
         {
-            UidCore.Init(UIdEnumConverter.GetUidInfos<EntityType>());
+            UidCore.Init(UidEnumConverter.GetUidInfos<EntityType>());
             IdCore.Init(new DefaultEntityIdDescGetter<EntityIds>());
         }
 
