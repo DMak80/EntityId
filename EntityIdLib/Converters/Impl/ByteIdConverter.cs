@@ -1,6 +1,7 @@
 using System;
+using EntityIdLib.UIds;
 
-namespace EntityIdLib.Converters
+namespace EntityIdLib.Converters.Impl
 {
     public class ByteIdConverter : IdConverter<byte>
     {
@@ -8,7 +9,7 @@ namespace EntityIdLib.Converters
         {
         }
 
-        private byte? GetId(UId uid)
+        private byte? GetId(Uid uid)
         {
             if ((uid.Value?.StartsWith(Starts) ?? false)
                 && uid.Value.Length > Starts.Length
@@ -18,19 +19,14 @@ namespace EntityIdLib.Converters
             return null;
         }
 
-        public override bool IsValidUid(UId uid)
+        public override byte FromUid(Uid uid)
         {
-            return GetId(uid).HasValue;
+            return GetId(uid) ?? throw new ArgumentOutOfRangeException($"Unknown prefix in arg {uid.Value}");
         }
 
-        public override byte FromUid(UId uid)
+        public override Uid ToUid(byte key)
         {
-            return GetId(uid) ?? throw new ArgumentOutOfRangeException(nameof(uid));
-        }
-
-        public override UId ToUid(byte key)
-        {
-            return new UId($"{Starts}{key}");
+            return new Uid($"{Starts}{key}");
         }
     }
 }

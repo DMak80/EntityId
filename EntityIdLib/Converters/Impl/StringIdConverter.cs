@@ -1,6 +1,7 @@
 using System;
+using EntityIdLib.UIds;
 
-namespace EntityIdLib.Converters
+namespace EntityIdLib.Converters.Impl
 {
     public class StringIdConverter : IdConverter<string>
     {
@@ -8,22 +9,22 @@ namespace EntityIdLib.Converters
         {
         }
 
-        public override bool IsValidUid(UId uid)
+        private bool IsValidUid(Uid uid)
         {
             return (uid.Value?.StartsWith(Starts) ?? false)
                    && uid.Value.Length > Starts.Length;
         }
 
-        public override string FromUid(UId uid)
+        public override string FromUid(Uid uid)
         {
             if (!IsValidUid(uid))
                 throw new ArgumentOutOfRangeException(nameof(uid));
             return uid.Value?.Substring(Starts.Length);
         }
 
-        public override UId ToUid(string key)
+        public override Uid ToUid(string key)
         {
-            return new UId($"{Starts}{key}");
+            return new Uid($"{Starts}{key}");
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
+using EntityIdLib.UIds;
 
-namespace EntityIdLib.Converters
+namespace EntityIdLib.Converters.Impl
 {
     public class ShortIdConverter : IdConverter<short>
     {
@@ -8,7 +9,7 @@ namespace EntityIdLib.Converters
         {
         }
 
-        private short? GetId(UId uid)
+        private short? GetId(Uid uid)
         {
             if ((uid.Value?.StartsWith(Starts) ?? false)
                 && uid.Value.Length > Starts.Length
@@ -18,19 +19,14 @@ namespace EntityIdLib.Converters
             return null;
         }
 
-        public override bool IsValidUid(UId uid)
-        {
-            return GetId(uid).HasValue;
-        }
-
-        public override short FromUid(UId uid)
+        public override short FromUid(Uid uid)
         {
             return GetId(uid) ?? throw new ArgumentOutOfRangeException(nameof(uid));
         }
 
-        public override UId ToUid(short key)
+        public override Uid ToUid(short key)
         {
-            return new UId($"{Starts}{key}");
+            return new Uid($"{Starts}{key}");
         }
     }
 }

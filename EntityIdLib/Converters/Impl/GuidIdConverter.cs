@@ -1,6 +1,7 @@
 using System;
+using EntityIdLib.UIds;
 
-namespace EntityIdLib.Converters
+namespace EntityIdLib.Converters.Impl
 {
     public class GuidIdConverter : IdConverter<Guid>
     {
@@ -8,7 +9,7 @@ namespace EntityIdLib.Converters
         {
         }
 
-        private Guid? GetId(UId uid)
+        private Guid? GetId(Uid uid)
         {
             if ((uid.Value?.StartsWith(Starts) ?? false)
                 && uid.Value.Length > Starts.Length
@@ -18,19 +19,14 @@ namespace EntityIdLib.Converters
             return null;
         }
 
-        public override bool IsValidUid(UId uid)
-        {
-            return GetId(uid).HasValue;
-        }
-
-        public override Guid FromUid(UId uid)
+        public override Guid FromUid(Uid uid)
         {
             return GetId(uid) ?? throw new ArgumentOutOfRangeException(nameof(uid));
         }
 
-        public override UId ToUid(Guid key)
+        public override Uid ToUid(Guid key)
         {
-            return new UId($"{Starts}{key}");
+            return new Uid($"{Starts}{key}");
         }
     }
 }
