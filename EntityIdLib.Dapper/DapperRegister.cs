@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using Dapper;
 using EntityIdLib.Ids;
+using EntityIdLib.Uids;
 
 namespace EntityIdLib.Dapper
 {
@@ -13,7 +15,11 @@ namespace EntityIdLib.Dapper
             var typeHandler = typeof(IdTypeHandler<,>);
             foreach (var entityIdInfo in IdCore.Instance.Infos)
             {
-                var ttype = typeHandler.MakeGenericType(entityIdInfo.IdType.GetGenericArguments());
+                var args = entityIdInfo.IdType
+                    .GetInterfaces()
+                    .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIdBase<,>))
+                    ?.GetGenericArguments();
+                var ttype = typeHandler.MakeGenericType(args);
                 var instance = (SqlMapper.ITypeHandler) Activator.CreateInstance(ttype);
                 SqlMapper.AddTypeHandler(entityIdInfo.IdType, instance);
             }

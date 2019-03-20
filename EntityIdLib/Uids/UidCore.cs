@@ -56,7 +56,7 @@ namespace EntityIdLib.Uids
             _typePrefixes[info.PublicUId] = info;
         }
 
-        public void CheckType(Uid uid, Type t)
+        public void CheckType(IUid uid, Type t)
         {
             if (_typePrefixes.TryGetValue(t, out var prefix))
             {
@@ -71,7 +71,7 @@ namespace EntityIdLib.Uids
             }
         }
 
-        public void CheckType(Uid uid)
+        public void CheckType(IUid uid)
         {
             if (!_prefixTypes.TryGetValue(uid.Value, out _))
             {
