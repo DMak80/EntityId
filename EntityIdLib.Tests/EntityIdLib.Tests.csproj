@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\EntityIdLib.Json\EntityIdLib.Json.csproj" />
       <ProjectReference Include="..\EntityIdLib\EntityIdLib.csproj" />
     </ItemGroup>
 

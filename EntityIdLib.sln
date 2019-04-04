@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityIdLib.Tests", "Entity
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityIdLib.Dapper", "EntityIdLib.Dapper\EntityIdLib.Dapper.csproj", "{0AFC5253-8050-4DA6-BA25-C66F261F3EDD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityIdLib.Json", "EntityIdLib.Json\EntityIdLib.Json.csproj", "{F3C00C84-A6FA-43A1-BD1C-964FD305AFB6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{0AFC5253-8050-4DA6-BA25-C66F261F3EDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0AFC5253-8050-4DA6-BA25-C66F261F3EDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0AFC5253-8050-4DA6-BA25-C66F261F3EDD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3C00C84-A6FA-43A1-BD1C-964FD305AFB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3C00C84-A6FA-43A1-BD1C-964FD305AFB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3C00C84-A6FA-43A1-BD1C-964FD305AFB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3C00C84-A6FA-43A1-BD1C-964FD305AFB6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

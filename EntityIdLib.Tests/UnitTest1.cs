@@ -2,9 +2,11 @@ using System;
 using EntityIdLib.Converters;
 using EntityIdLib.Default;
 using EntityIdLib.Ids;
+using EntityIdLib.Json;
 using EntityIdLib.Tests.EntityTypeFormat;
 using EntityIdLib.Tests.EntityTypeFormat.Ids;
 using EntityIdLib.Uids;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace EntityIdLib.Tests
@@ -66,6 +68,25 @@ namespace EntityIdLib.Tests
             var uidUserId = userId.ToUid();
 
             Assert.Throws<ArgumentOutOfRangeException>(() => uidUserId.ToId<byte, PermId>());
+        }
+
+        public class TestUserEntity
+        {
+            public UserUid Uid { get; set; }
+            public string Name { get; set; }
+        }
+
+        [Fact]
+        public void Test7()
+        {
+            var userId = new UserId(1);
+            var uidUserId = userId.ToUid();
+            var entity = new TestUserEntity {Name = "test", Uid = new UserUid(uidUserId)};
+            var json = JsonConvert.SerializeObject(entity);
+            var entity2 = JsonConvert.DeserializeObject<TestUserEntity>(json);
+
+            Assert.Equal(entity.Uid, entity2.Uid);
+            Assert.Equal(entity.Name, entity2.Name);
         }
     }
 }
