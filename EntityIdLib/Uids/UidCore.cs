@@ -11,6 +11,7 @@ namespace EntityIdLib.Uids
         {
             Instance = new UidCore(types);
         }
+
         private class PrefixEqualityComparer : IEqualityComparer<string>
         {
             public bool Equals(string x, string y)
@@ -25,7 +26,7 @@ namespace EntityIdLib.Uids
             }
         }
 
-        private readonly Dictionary<Type, EntityUidInfo> _typePrefixes = 
+        private readonly Dictionary<Type, EntityUidInfo> _typePrefixes =
             new Dictionary<Type, EntityUidInfo>();
 
         private readonly Dictionary<string, EntityUidInfo> _prefixTypes =
@@ -56,7 +57,8 @@ namespace EntityIdLib.Uids
             _typePrefixes[info.PublicUId] = info;
         }
 
-        public void CheckType(IUid uid, Type t)
+        public void CheckType<T>(T uid, Type t)
+            where T : IUid
         {
             if (_typePrefixes.TryGetValue(t, out var prefix))
             {
@@ -71,7 +73,8 @@ namespace EntityIdLib.Uids
             }
         }
 
-        public void CheckType(IUid uid)
+        public void CheckType<T>(T uid)
+            where T : IUid
         {
             if (!_prefixTypes.TryGetValue(uid.Value, out _))
             {

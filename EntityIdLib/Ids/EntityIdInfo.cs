@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http.Headers;
 using EntityIdLib.Uids;
 
 namespace EntityIdLib.Ids
