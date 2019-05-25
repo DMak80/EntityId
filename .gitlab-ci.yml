@@ -12,7 +12,7 @@ stages:
 
 build:
   stage: build
-  image: microsoft/dotnet:2.1-sdk-alpine
+  image: microsoft/dotnet:2.2-sdk-alpine
   script:
     - dotnet restore -s https://api.nuget.org/v3/index.json --packages ./.nuget/
     - dotnet build --no-restore -c Release
