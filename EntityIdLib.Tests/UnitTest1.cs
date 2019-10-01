@@ -48,7 +48,7 @@ namespace EntityIdLib.Tests
         {
             var userId = new UserId(1);
             var uidUserId = userId.ToUid();
-            var userId2 = uidUserId.ToId<int, UserId>(); //new UserId(uidUserId);
+            var userId2 = UserId.FromUid(uidUserId); //new UserId(uidUserId);
             Assert.Equal(userId, userId2);
         }
 
@@ -57,7 +57,7 @@ namespace EntityIdLib.Tests
         {
             var permId = new PermId(123);
             var uidPermId = permId.ToUid();
-            var permId2 = uidPermId.ToId<byte, PermId>(); //new PermId(uidPermId);
+            var permId2 = PermId.FromUid(uidPermId); //new PermId(uidPermId);
             Assert.Equal(permId, permId2);
         }
 
@@ -67,7 +67,7 @@ namespace EntityIdLib.Tests
             var userId = new UserId(1);
             var uidUserId = userId.ToUid();
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => uidUserId.ToId<byte, PermId>());
+            Assert.Throws<ArgumentOutOfRangeException>(() => PermId.FromUid(uidUserId));
         }
 
         public class TestUserEntity

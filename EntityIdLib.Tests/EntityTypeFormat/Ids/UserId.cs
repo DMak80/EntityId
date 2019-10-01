@@ -1,3 +1,4 @@
+using EntityIdLib.Converters;
 using EntityIdLib.Ids;
 using EntityIdLib.Json;
 using EntityIdLib.Uids;
@@ -32,5 +33,15 @@ namespace EntityIdLib.Tests.EntityTypeFormat.Ids
         }
 
         public int Id { get; }
+        
+        public Uid ToUid()
+        {
+            return this.ToUid<int, UserId>();
+        }
+
+        public static UserId FromUid(Uid uid)
+        {
+            return uid.ToId<int, UserId>();
+        }
     }
 }

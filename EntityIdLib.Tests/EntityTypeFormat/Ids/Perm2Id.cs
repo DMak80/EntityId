@@ -1,3 +1,4 @@
+using EntityIdLib.Converters;
 using EntityIdLib.Ids;
 using EntityIdLib.Uids;
 
@@ -29,5 +30,16 @@ namespace EntityIdLib.Tests.EntityTypeFormat.Ids
         }
 
         public string Id { get; }
+        
+        
+        public Uid ToUid()
+        {
+            return this.ToUid<string, Perm2Id>();
+        }
+
+        public static Perm2Id FromUid(Uid uid)
+        {
+            return uid.ToId<string, Perm2Id>();
+        }
     }
 }
