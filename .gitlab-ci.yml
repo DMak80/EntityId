@@ -3,16 +3,16 @@ image: docker:stable
 services:
   - docker:dind
 
-variables:
-  DOCKER_DRIVER: overlay2
-  DOCKER_HOST: tcp://localhost:2375
+#variables:
+#  DOCKER_DRIVER: overlay2
+#  DOCKER_HOST: tcp://localhost:2375
 
 stages:
   - build
 
 build:
   stage: build
-  image: microsoft/dotnet:2.2-sdk-alpine
+  image: mcr.microsoft.com/dotnet/core/sdk:3.0
   script:
     - dotnet restore -s https://api.nuget.org/v3/index.json --packages ./.nuget/
     - dotnet build --no-restore -c Release
