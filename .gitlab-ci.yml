@@ -1,7 +1,7 @@
-image: docker:stable
+image: docker:18.09.7-dind
 
 services:
-  - docker:18.09.7-dind
+  - docker:dind
 
 #variables:
 #  DOCKER_DRIVER: overlay2
