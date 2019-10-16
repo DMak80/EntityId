@@ -13,5 +13,11 @@ namespace EntityIdLib.Uids
         }
 
         public string Value { get; }
+
+        public Uid For<T>()
+        {
+            this.CheckType(typeof(T));
+            return this;
+        }
     }
 }

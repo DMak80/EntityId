@@ -13,13 +13,7 @@ namespace EntityIdLib.Tests.EntityTypeFormat.Ids
 
         public UserUid(Uid uid)
         {
-            _uid = uid;
-            uid.CheckType(GetType());
-        }
-
-        public UserUid(UserUid uid)
-        {
-            _uid = uid._uid;
+            _uid = uid.For<UserUid>();
         }
 
         public string Value => _uid.Value;
@@ -27,21 +21,18 @@ namespace EntityIdLib.Tests.EntityTypeFormat.Ids
 
     public struct UserId : IIdBase<int, UserId>
     {
+        public static Converter<int, UserId> Converter = new Converter<int, UserId>();
+
         public UserId(int id)
         {
             Id = id;
         }
 
         public int Id { get; }
-        
+
         public Uid ToUid()
         {
-            return this.ToUid<int, UserId>();
-        }
-
-        public static UserId FromUid(Uid uid)
-        {
-            return uid.ToId<int, UserId>();
+            return Converter.ToUid(Id);
         }
     }
 }

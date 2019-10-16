@@ -48,7 +48,7 @@ namespace EntityIdLib.Tests
         {
             var userId = new UserId(1);
             var uidUserId = userId.ToUid();
-            var userId2 = UserId.FromUid(uidUserId); //new UserId(uidUserId);
+            var userId2 = UserId.Converter.FromUid(uidUserId); //new UserId(uidUserId);
             Assert.Equal(userId, userId2);
         }
 
@@ -57,7 +57,7 @@ namespace EntityIdLib.Tests
         {
             var permId = new PermId(123);
             var uidPermId = permId.ToUid();
-            var permId2 = PermId.FromUid(uidPermId); //new PermId(uidPermId);
+            var permId2 = PermId.Converter.FromUid(uidPermId); //new PermId(uidPermId);
             Assert.Equal(permId, permId2);
         }
 
@@ -67,7 +67,7 @@ namespace EntityIdLib.Tests
             var userId = new UserId(1);
             var uidUserId = userId.ToUid();
 
-            Assert.Throws<ArgumentOutOfRangeException>(() => PermId.FromUid(uidUserId));
+            Assert.Throws<ArgumentOutOfRangeException>(() => PermId.Converter.FromUid(uidUserId));
         }
 
         public class TestUserEntity
@@ -87,6 +87,15 @@ namespace EntityIdLib.Tests
 
             Assert.Equal(entity.Uid, entity2.Uid);
             Assert.Equal(entity.Name, entity2.Name);
+        }
+        
+        [Fact]
+        public void Test8()
+        {
+            unsafe
+            {
+                Assert.Equal(sizeof(byte), sizeof(PermId));
+            }
         }
     }
 }

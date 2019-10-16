@@ -10,13 +10,7 @@ namespace EntityIdLib.Tests.EntityTypeFormat.Ids
 
         public Perm2Uid(Uid uid)
         {
-            _uid = uid;
-            uid.CheckType(GetType());
-        }
-
-        public Perm2Uid(Perm2Uid uid)
-        {
-            _uid = uid._uid;
+            _uid = uid.For<Perm2Uid>();
         }
 
         public string Value => _uid.Value;
@@ -24,6 +18,8 @@ namespace EntityIdLib.Tests.EntityTypeFormat.Ids
 
     public struct Perm2Id : IIdBase<string, Perm2Id>
     {
+        public static Converter<string, Perm2Id> Converter = new Converter<string, Perm2Id>();
+
         public Perm2Id(string id)
         {
             Id = id;
@@ -34,12 +30,7 @@ namespace EntityIdLib.Tests.EntityTypeFormat.Ids
         
         public Uid ToUid()
         {
-            return this.ToUid<string, Perm2Id>();
-        }
-
-        public static Perm2Id FromUid(Uid uid)
-        {
-            return uid.ToId<string, Perm2Id>();
+            return Converter.ToUid(Id);
         }
     }
 }
