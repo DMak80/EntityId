@@ -11,13 +11,17 @@ namespace EntityIdLib.Converters
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Uid ToUid(T id)
         {
-            return default(TC).GetConverter<T, TC>().ToUid(id);
+            var converter = default(TC).GetConverter<T, TC>()
+                   ?? throw new ArgumentException($"No converter from {typeof(T).FullName} to Uid");
+            return converter.ToUid(id);
         }
-        
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TC FromUid(Uid uid)
         {
-            return (TC) Activator.CreateInstance(typeof(TC), default(TC).GetConverter<T, TC>().FromUid(uid));
+            var converter = default(TC).GetConverter<T, TC>()
+                        ?? throw new ArgumentException($"No converter from Uid({uid.Value}) to {typeof(T).FullName}");
+            return (TC) Activator.CreateInstance(typeof(TC), converter.FromUid(uid));
         }
     }
 }

@@ -13,7 +13,7 @@ namespace EntityIdLib.Dapper
 
         public override Uid Parse(object value)
         {
-            return new Uid(value.ToString());
+            return new Uid(value?.ToString());
         }
     }
 }

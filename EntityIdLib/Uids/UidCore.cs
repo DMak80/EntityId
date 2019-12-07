@@ -5,11 +5,14 @@ namespace EntityIdLib.Uids
 {
     public class UidCore
     {
-        public static UidCore Instance { get; private set; }
+        private static UidCore? _core;
+
+        public static UidCore Instance => _core
+                                          ?? throw new NullReferenceException("_core is not defined. Use Init.");
 
         public static void Init(IEnumerable<EntityUidInfo> types)
         {
-            Instance = new UidCore(types);
+            _core = new UidCore(types);
         }
 
         private class PrefixEqualityComparer : IEqualityComparer<string>
@@ -76,13 +79,13 @@ namespace EntityIdLib.Uids
         public void CheckType<T>(T uid)
             where T : IUid
         {
-            if (!_prefixTypes.TryGetValue(uid.Value, out _))
+            if (uid.Value != null && !_prefixTypes.TryGetValue(uid.Value, out _))
             {
                 throw new ArgumentException($"Id '{uid.Value}' is not entity id. Prefix is not found.");
             }
         }
 
-        public EntityUidInfo Get(Type type)
+        public EntityUidInfo? Get(Type type)
         {
             if (_typePrefixes.TryGetValue(type, out var desc))
             {

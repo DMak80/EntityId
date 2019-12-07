@@ -2,7 +2,9 @@ namespace EntityIdLib.Uids
 {
     public struct Uid : IUid
     {
-        public Uid(string value)
+        public static readonly Uid Empty = new Uid(null);
+        
+        public Uid(string? value)
         {
             Value = value;
             this.CheckType();
@@ -12,7 +14,7 @@ namespace EntityIdLib.Uids
         {
         }
 
-        public string Value { get; }
+        public string? Value { get; }
 
         public Uid For<T>()
         {

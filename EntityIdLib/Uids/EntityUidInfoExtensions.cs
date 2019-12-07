@@ -5,7 +5,7 @@ namespace EntityIdLib.Uids
 {
     public static class EntityUidInfoExtensions
     {
-        public static EntityUidInfo ToUidInfo(this Type type)
+        public static EntityUidInfo? ToUidInfo(this Type type)
         {
             if (!typeof(IUid).IsAssignableFrom(type))
             {

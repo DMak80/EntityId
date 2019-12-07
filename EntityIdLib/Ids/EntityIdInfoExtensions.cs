@@ -7,7 +7,7 @@ namespace EntityIdLib.Ids
 {
     public static class EntityIdInfoExtensions
     {
-        public static EntityIdInfo ToIdInfo(this Type type)
+        public static EntityIdInfo? ToIdInfo(this Type type)
         {
             if (type.GetInterfaces()
                 .Where(i => i.IsGenericType)

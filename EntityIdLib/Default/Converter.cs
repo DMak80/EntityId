@@ -48,7 +48,11 @@ namespace EntityIdLib.Default
                 var attr = field.GetCustomAttribute<EntityIdInfoAttribute>();
                 if (attr == null)
                     continue;
-                result.Add(new EntityIdInfo(attr.IdType, attr.IdTypeConverter, UidCore.Instance.Get(attr.UIdType)));
+                var info = UidCore.Instance.Get(attr.UIdType);
+                if (info != null)
+                {
+                    result.Add(new EntityIdInfo(attr.IdType, attr.IdTypeConverter, info));
+                }
             }
 
             return result;
