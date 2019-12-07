@@ -11,7 +11,7 @@ namespace EntityIdLib.Converters
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Uid ToUid(T id)
         {
-            var converter = default(TC).GetConverter<T, TC>()
+            var converter = IdCore.Instance.GetConverter<T, TC>()
                    ?? throw new ArgumentException($"No converter from {typeof(T).FullName} to Uid");
             return converter.ToUid(id);
         }
@@ -19,7 +19,7 @@ namespace EntityIdLib.Converters
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public TC FromUid(Uid uid)
         {
-            var converter = default(TC).GetConverter<T, TC>()
+            var converter = IdCore.Instance.GetConverter<T, TC>()
                         ?? throw new ArgumentException($"No converter from Uid({uid.Value}) to {typeof(T).FullName}");
             return (TC) Activator.CreateInstance(typeof(TC), converter.FromUid(uid));
         }
