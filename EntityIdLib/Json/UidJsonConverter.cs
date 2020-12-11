@@ -20,7 +20,7 @@ namespace EntityIdLib.Json
                 return Uid.Empty;
             }
             
-            IUid? uid = hasExistingValue && existingValue.Value == uidValue
+            IUid uid = hasExistingValue && existingValue.Value == uidValue
                     ? existingValue
                     : (IUid)Activator.CreateInstance(objectType, new Uid(uidValue));
             return uid;

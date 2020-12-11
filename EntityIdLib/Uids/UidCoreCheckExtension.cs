@@ -2,7 +2,7 @@ using System;
 
 namespace EntityIdLib.Uids
 {
-    public static class UidCoreExtension
+    public static class UidCoreCheckExtension
     {
         public static void CheckType<T>(this T uid, Type t)
             where T : IUid

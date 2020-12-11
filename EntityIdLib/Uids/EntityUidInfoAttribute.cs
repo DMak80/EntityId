@@ -2,16 +2,16 @@ using System;
 
 namespace EntityIdLib.Uids
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Field)]
     public class EntityUidInfoAttribute : Attribute
     {
-        public EntityUidInfoAttribute(string prefix, string name)
+        public EntityUidInfoAttribute(string prefix, Type uidType)
         {
             Prefix = prefix ?? throw new ArgumentNullException(nameof(prefix));
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            UidType = uidType ?? throw new ArgumentNullException(nameof(uidType));
         }
 
         public string Prefix { get; }
-        public string Name { get; }
+        public Type UidType { get; }
     }
 }

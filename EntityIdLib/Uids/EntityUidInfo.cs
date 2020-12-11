@@ -4,20 +4,22 @@ namespace EntityIdLib.Uids
 {
     public class EntityUidInfo
     {
-        public EntityUidInfo(string prefix, Type publicUId, string name)
+        public EntityUidInfo(string prefix, Type publicUid, string name, Type? converter = null)
         {
             Prefix = prefix;
-            PublicUId = publicUId;
+            PublicUid = publicUid;
             Name = name;
+            Converter = converter;
 
-            if (!typeof(IUid).IsAssignableFrom(publicUId))
+            if (!typeof(IUid).IsAssignableFrom(publicUid))
             {
-                throw new ArgumentException($"{publicUId.Name} cannot be cast to IUId");
+                throw new ArgumentException($"{publicUid.Name} cannot be cast to IUId");
             }
         }
 
         public string Prefix { get; }
-        public Type PublicUId { get; }
+        public Type PublicUid { get; }
         public string Name { get; }
+        public Type? Converter { get; }
     }
 }

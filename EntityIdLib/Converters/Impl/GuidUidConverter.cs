@@ -3,23 +3,23 @@ using EntityIdLib.Uids;
 
 namespace EntityIdLib.Converters.Impl
 {
-    public class GuidIdConverter : IdConverter<Guid>
+    public class GuidUidConverter : UidConverter<Guid>
     {
-        public GuidIdConverter(string start) : base(start)
+        public GuidUidConverter(string start) : base(start)
         {
         }
 
-        private Guid? GetId(Uid uid)
+        private Guid? GetId(string uid)
         {
-            if ((uid.Value?.StartsWith(Starts) ?? false)
-                && uid.Value.Length > Starts.Length
-                && Guid.TryParse(uid.Value.Substring(Starts.Length), out var i))
+            if ((uid?.StartsWith(Starts) ?? false)
+                && uid.Length > Starts.Length
+                && Guid.TryParse(uid.Substring(Starts.Length), out var i))
                 return i;
 
             return null;
         }
 
-        public override Guid FromUid(Uid uid)
+        public override Guid FromUid(string uid)
         {
             return GetId(uid) ?? throw new ArgumentOutOfRangeException(nameof(uid));
         }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using Dapper;
-using EntityIdLib.Ids;
 using EntityIdLib.Uids;
 
 namespace EntityIdLib.Dapper
@@ -11,17 +9,22 @@ namespace EntityIdLib.Dapper
         public static void Init()
         {
             SqlMapper.AddTypeHandler(new UidTypeHandler());
-
-            var typeHandler = typeof(IdTypeHandler<,>);
-            foreach (var entityIdInfo in IdCore.Instance.Infos)
+            var infos = UidCore.Instance.GetAll();
+            foreach (var uidInfo in infos)
             {
-                var args = entityIdInfo.IdType
-                    .GetInterfaces()
-                    .FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIdBase<,>))
-                    ?.GetGenericArguments();
-                var ttype = typeHandler.MakeGenericType(args);
-                var instance = (SqlMapper.ITypeHandler) Activator.CreateInstance(ttype);
-                SqlMapper.AddTypeHandler(entityIdInfo.IdType, instance);
+                if (uidInfo.Converter == null)
+                {
+                    var type = typeof(TUidTypeHandler<>).MakeGenericType(uidInfo.PublicUid);
+                    
+                    SqlMapper.AddTypeHandler(uidInfo.PublicUid, (SqlMapper.ITypeHandler)Activator.CreateInstance(type));
+                }
+                else
+                {
+                    var type = typeof(TUidTypeHandler<,>).MakeGenericType(uidInfo.PublicUid, uidInfo.Converter.GenericTypeArguments[0]);
+                    
+                    SqlMapper.AddTypeHandler(uidInfo.PublicUid, (SqlMapper.ITypeHandler)Activator.CreateInstance(type));
+                    
+                }
             }
         }
     }

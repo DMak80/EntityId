@@ -1,8 +1,5 @@
 using System;
-using EntityIdLib.Converters;
 using EntityIdLib.Default;
-using EntityIdLib.Ids;
-using EntityIdLib.Json;
 using EntityIdLib.Tests.EntityTypeFormat;
 using EntityIdLib.Tests.EntityTypeFormat.Ids;
 using EntityIdLib.Uids;
@@ -15,14 +12,13 @@ namespace EntityIdLib.Tests
     {
         public UnitTest1()
         {
-            UidCore.Init(UidEnumConverter.GetUidInfos<EntityType>());
-            IdCore.Init(UidEnumConverter.GetIdInfos<EntityIds>());
+            UidCore.Init(UidEnumConverter.GetUidInfos<EntityType, ConvertUids>());
         }
 
         [Fact]
         public void Test1()
         {
-            var userId = new UserId(1);
+            var userId = new UserUid(1);
             var uidUserId = userId.ToUid();
             Assert.Equal("U.1", uidUserId.Value);
         }

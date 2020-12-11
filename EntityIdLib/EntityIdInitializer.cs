@@ -1,4 +1,3 @@
-using EntityIdLib.Ids;
 using EntityIdLib.Uids;
 
 namespace EntityIdLib
@@ -8,7 +7,6 @@ namespace EntityIdLib
         public static void Init(IEntityIdInfoSource source)
         {
             UidCore.Init(source.GetUidInfos());
-            IdCore.Init(source.GetIdInfos());
         }
     }
 }

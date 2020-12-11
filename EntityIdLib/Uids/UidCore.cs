@@ -48,16 +48,16 @@ namespace EntityIdLib.Uids
         {
             if (_prefixTypes.ContainsKey(info.Prefix))
                 throw new ArgumentException(
-                    $"Prefix '{info.Prefix}' is same as in {_prefixTypes[info.Prefix].Name} and want be used by {info.PublicUId.Name} in {info.Name}");
+                    $"Prefix '{info.Prefix}' is same as in {_prefixTypes[info.Prefix].Name} and want be used by {info.PublicUid.Name} in {info.Name}");
             _prefixTypes[info.Prefix] = info;
         }
 
         private void AddType(EntityUidInfo info)
         {
-            if (_typePrefixes.ContainsKey(info.PublicUId))
+            if (_typePrefixes.ContainsKey(info.PublicUid))
                 throw new ArgumentException(
-                    $"Type '{info.PublicUId.Name}' is duplicated in entity {info.Name}");
-            _typePrefixes[info.PublicUId] = info;
+                    $"Type '{info.PublicUid.Name}' is duplicated in entity {info.Name}");
+            _typePrefixes[info.PublicUid] = info;
         }
 
         public void CheckType<T>(T uid, Type t)
@@ -93,6 +93,10 @@ namespace EntityIdLib.Uids
             }
 
             return null;
+        }
+        public IEnumerable<EntityUidInfo> GetAll()
+        {
+            return _prefixTypes.Values;
         }
     }
 }
