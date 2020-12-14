@@ -1,5 +1,4 @@
 using EntityIdLib.Converters.Impl;
-using EntityIdLib.Default;
 using EntityIdLib.Tests.EntityTypeFormat.Ids;
 using EntityIdLib.Uids;
 
@@ -16,21 +15,26 @@ namespace EntityIdLib.Tests.EntityTypeFormat
         [EntityUidInfo("P.", typeof(PermUid))]
         Permission,
 
-        [EntityUidInfo("PP.", typeof(Perm2Uid))]
+        [EntityUidInfo("P2.", typeof(Perm2Uid))]
         Permission2
     }
+    
     /// <summary>
-    /// Inner Domain Data
+    /// Inner Domain Converter
     /// </summary>
-    public enum ConvertUids
+    public static class ConverterExtensions
     {
-        [EntityUidConverter(typeof(UserUid), typeof(IntUidConverter))]
-        User,
-
-        [EntityUidConverter(typeof(PermUid), typeof(ByteUidConverter))]
-        Permission,
-
-        [EntityUidConverter(typeof(Perm2Uid), typeof(StringUidConverter))]
-        Permission2
+        public static IntUidConverter Converter(this UserUid uid)
+        {
+            return (IntUidConverter)UidCore.Instance.Get(uid.GetType()).Converter;
+        }
+        public static ByteUidConverter Converter(this PermUid uid)
+        {
+            return (ByteUidConverter)UidCore.Instance.Get(uid.GetType()).Converter;
+        }
+        public static StringUidConverter Converter(this Perm2Uid uid)
+        {
+            return (StringUidConverter)UidCore.Instance.Get(uid.GetType()).Converter;
+        }
     }
 }

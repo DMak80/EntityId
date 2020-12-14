@@ -10,31 +10,19 @@ namespace EntityIdLib.Uids
         public static UidCore Instance => _core
                                           ?? throw new NullReferenceException("_core is not defined. Use Init.");
 
-        public static void Init(IEnumerable<EntityUidInfo> types)
-        {
-            _core = new UidCore(types);
-        }
-
-        private class PrefixEqualityComparer : IEqualityComparer<string>
-        {
-            public bool Equals(string x, string y)
-            {
-                return x.StartsWith(y, StringComparison.OrdinalIgnoreCase)
-                       || y.StartsWith(x, StringComparison.OrdinalIgnoreCase);
-            }
-
-            public int GetHashCode(string obj)
-            {
-                return obj.Substring(0, 1).ToLower().GetHashCode();
-            }
-        }
-
         private readonly Dictionary<Type, EntityUidInfo> _typePrefixes =
             new Dictionary<Type, EntityUidInfo>();
 
         private readonly Dictionary<string, EntityUidInfo> _prefixTypes =
             new Dictionary<string, EntityUidInfo>(new PrefixEqualityComparer());
 
+        #region Init
+
+        public static void Init(IEnumerable<EntityUidInfo> types)
+        {
+            _core = new UidCore(types);
+        }
+        
         private UidCore(IEnumerable<EntityUidInfo> types)
         {
             foreach (var desc in types)
@@ -59,6 +47,10 @@ namespace EntityIdLib.Uids
                     $"Type '{info.PublicUid.Name}' is duplicated in entity {info.Name}");
             _typePrefixes[info.PublicUid] = info;
         }
+
+        #endregion
+
+        #region Check
 
         public void CheckType<T>(T uid, Type t)
             where T : IUid
@@ -85,6 +77,10 @@ namespace EntityIdLib.Uids
             }
         }
 
+        #endregion
+
+        #region Get
+
         public EntityUidInfo? Get(Type type)
         {
             if (_typePrefixes.TryGetValue(type, out var desc))
@@ -94,9 +90,12 @@ namespace EntityIdLib.Uids
 
             return null;
         }
+
         public IEnumerable<EntityUidInfo> GetAll()
         {
             return _prefixTypes.Values;
         }
+
+        #endregion
     }
 }

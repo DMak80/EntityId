@@ -1,8 +1,9 @@
+using System;
 using EntityIdLib.Uids;
 
 namespace EntityIdLib.Converters
 {
-    public class UidConverter
+    public abstract class UidConverter
     {
         protected UidConverter(string start)
         {
@@ -11,12 +12,9 @@ namespace EntityIdLib.Converters
 
         public string Starts { get; }
 
-        public abstract object FromUid(string uid);
+        public abstract object? FromUidToObject(string? uid);
 
-        public abstract Uid ToUid(object key)
-        {
-            
-        }
+        public abstract Uid ToUid(object? key);
     }
 
     public abstract class UidConverter<T> : UidConverter
@@ -25,8 +23,18 @@ namespace EntityIdLib.Converters
         {
         }
 
-        public abstract T FromUid(string uid);
+        public abstract T FromUid(string? uid);
 
         public abstract Uid ToUid(T key);
+
+        public override object? FromUidToObject(string? uid)
+        {
+            return FromUid(uid);
+        }
+        
+        public override Uid ToUid(object? key)
+        {
+            return ToUid((T)key);
+        }
     }
 }

@@ -9,7 +9,7 @@ namespace EntityIdLib.Converters.Impl
         {
         }
 
-        private short? GetId(string uid)
+        private short? GetId(string? uid)
         {
             if ((uid?.StartsWith(Starts) ?? false)
                 && uid.Length > Starts.Length
@@ -19,7 +19,7 @@ namespace EntityIdLib.Converters.Impl
             return null;
         }
 
-        public override short FromUid(string uid)
+        public override short FromUid(string? uid)
         {
             return GetId(uid) ?? throw new ArgumentOutOfRangeException(nameof(uid));
         }
@@ -27,6 +27,11 @@ namespace EntityIdLib.Converters.Impl
         public override Uid ToUid(short key)
         {
             return new Uid($"{Starts}{key}");
+        }
+        
+        public override Uid ToUid(object? key)
+        {
+            return ToUid(key is short b ? b : Convert.ToInt16(key));
         }
     }
 }

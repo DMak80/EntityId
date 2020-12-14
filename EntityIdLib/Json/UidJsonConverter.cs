@@ -6,12 +6,12 @@ namespace EntityIdLib.Json
 {
     public class UidJsonConverter : JsonConverter<IUid>
     {
-        public override void WriteJson(JsonWriter writer, IUid value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, IUid? value, JsonSerializer serializer)
         {
             serializer.Serialize(writer, value?.Value);
         }
 
-        public override IUid ReadJson(JsonReader reader, Type objectType, IUid existingValue, bool hasExistingValue,
+        public override IUid ReadJson(JsonReader reader, Type objectType, IUid? existingValue, bool hasExistingValue,
             JsonSerializer serializer)
         {
             var uidValue = reader.Value?.ToString();

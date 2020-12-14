@@ -14,7 +14,7 @@ namespace EntityIdLib.Converters.Impl
             return (uid?.StartsWith(Starts) ?? false) && uid.Length > Starts.Length;
         }
 
-        public override string FromUid(string uid)
+        public override string FromUid(string? uid)
         {
             if (!IsValidUid(uid))
                 throw new ArgumentOutOfRangeException(nameof(uid));
@@ -24,6 +24,11 @@ namespace EntityIdLib.Converters.Impl
         public override Uid ToUid(string key)
         {
             return new Uid($"{Starts}{key}");
+        }
+        
+        public override Uid ToUid(object? key)
+        {
+            return ToUid(key is string b ? b : key?.ToString() ?? string.Empty);
         }
     }
 }

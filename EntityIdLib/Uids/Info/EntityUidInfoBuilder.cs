@@ -1,36 +1,34 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using EntityIdLib.Uids;
+using EntityIdLib.Converters;
 
-namespace EntityIdLib.Default
+namespace EntityIdLib.Uids
 {
-    public class UidEnumConverter
+    public class EntityUidInfoBuilder
     {
-        public static List<EntityUidInfo> GetUidInfos<T, TC>()
+        public static List<EntityUidInfo> GetUidInfos<T>(Type staticConverters)
         {
             var type = typeof(T);
             if (!type.IsEnum)
             {
                 throw new ApplicationException($"Type {type.Name} is not enum");
             }
-            var tctype = typeof(TC);
-            if (!tctype.IsEnum)
-            {
-                throw new ApplicationException($"Type {tctype.Name} is not enum");
-            }
 
             var result = new List<EntityUidInfo>();
-            
+
             Dictionary<Type, Type?> converters = new Dictionary<Type, Type?>();
-            var tcobjs = Enum.GetValues(tctype);
+            var tcobjs = staticConverters.GetMethods()
+                .Where(m => m.ReturnType.IsSubclassOf(typeof(UidConverter)))
+                .Where(m => typeof(IUid).IsAssignableFrom(m.GetParameters().FirstOrDefault()?.ParameterType ?? typeof(object)))
+                .ToArray();
+            
             foreach (var obj in tcobjs)
             {
-                var field = type.GetField(obj.ToString());
-                var attr = field?.GetCustomAttribute<EntityUidConverterAttribute>();
-                if (attr == null)
-                    continue;
-                converters[attr.Uid] = attr.UidConverter;
+                var parameter = obj.GetParameters().FirstOrDefault().ParameterType;
+                var converter = obj.ReturnType;
+                converters[parameter] = converter;
             }
 
             var objs = Enum.GetValues(type);

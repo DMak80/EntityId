@@ -1,4 +1,5 @@
 using System;
+using EntityIdLib.Converters;
 
 namespace EntityIdLib.Uids
 {
@@ -9,7 +10,10 @@ namespace EntityIdLib.Uids
             Prefix = prefix;
             PublicUid = publicUid;
             Name = name;
-            Converter = converter;
+            ConverterType = converter;
+            Converter = converter == null
+                ? null
+                :(UidConverter?)Activator.CreateInstance(converter, prefix);
 
             if (!typeof(IUid).IsAssignableFrom(publicUid))
             {
@@ -20,6 +24,7 @@ namespace EntityIdLib.Uids
         public string Prefix { get; }
         public Type PublicUid { get; }
         public string Name { get; }
-        public Type? Converter { get; }
+        public UidConverter? Converter { get; }
+        public Type? ConverterType { get; }
     }
 }

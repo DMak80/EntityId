@@ -9,7 +9,7 @@ namespace EntityIdLib.Converters.Impl
         {
         }
 
-        private long? GetId(string uid)
+        private long? GetId(string? uid)
         {
             if ((uid?.StartsWith(Starts) ?? false)
                 && uid.Length > Starts.Length
@@ -19,7 +19,7 @@ namespace EntityIdLib.Converters.Impl
             return null;
         }
 
-        public override long FromUid(string uid)
+        public override long FromUid(string? uid)
         {
             return GetId(uid) ?? throw new ArgumentOutOfRangeException(nameof(uid));
         }
@@ -27,6 +27,11 @@ namespace EntityIdLib.Converters.Impl
         public override Uid ToUid(long key)
         {
             return new Uid($"{Starts}{key}");
+        }
+        
+        public override Uid ToUid(object? key)
+        {
+            return ToUid(key is long b ? b : Convert.ToInt64(key));
         }
     }
 }

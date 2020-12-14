@@ -9,7 +9,7 @@ namespace EntityIdLib.Converters.Impl
         {
         }
 
-        private byte? GetId(string uid)
+        private byte? GetId(string? uid)
         {
             if ((uid?.StartsWith(Starts) ?? false)
                 && uid.Length > Starts.Length
@@ -19,7 +19,7 @@ namespace EntityIdLib.Converters.Impl
             return null;
         }
 
-        public override byte FromUid(string uid)
+        public override byte FromUid(string? uid)
         {
             return GetId(uid) ?? throw new ArgumentOutOfRangeException($"Unknown prefix in arg {uid}");
         }
@@ -27,6 +27,11 @@ namespace EntityIdLib.Converters.Impl
         public override Uid ToUid(byte key)
         {
             return new Uid($"{Starts}{key}");
+        }
+
+        public override Uid ToUid(object? key)
+        {
+            return ToUid(key is byte b ? b : Convert.ToByte(key));
         }
     }
 }
